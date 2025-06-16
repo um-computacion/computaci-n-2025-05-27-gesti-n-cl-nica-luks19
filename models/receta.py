@@ -1,5 +1,3 @@
-# receta.py
-from datetime import datetime
 from .paciente import Paciente
 from .medico import Medico
 
@@ -8,7 +6,9 @@ class Receta:
         self.__paciente = paciente
         self.__medico = medico
         self.__medicamentos = medicamentos
-        self.__fecha = datetime.now()
+
+    def obtener_medicamentos(self) -> list[str]:
+        return self.__medicamentos
 
     def __str__(self) -> str:
-        return f"Receta {self.__fecha}: {', '.join(self.__medicamentos)}"
+        return f"Receta para {self.__paciente.obtener_nombre()} por {self.__medico.obtener_nombre()}: {', '.join(self.__medicamentos)}"
