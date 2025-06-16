@@ -5,7 +5,13 @@ from .turno import Turno
 from .historia_clinica import HistoriaClinica
 from .receta import Receta
 from .especialidad import Especialidad 
-from .exceptions import *
+from .exceptions import (
+    PacienteExistenteException,
+    MedicoExistenteException,
+    PacienteNoEncontrado,
+    MedicoNoDisponible,
+    TurnoOcupado
+)
 
 # Diccionario para traducir días de la semana de inglés a español
 DIAS_SEMANA = {
@@ -38,58 +44,46 @@ class Clinica:
             raise MedicoExistenteException(f"La matrícula {matricula} ya existe")
         self.__medicos[matricula] = medico
 
-    def agregar_especialidad_a_medico(self, matricula: str, especialidad: Especialidad):
-        if matricula not in self.__medicos:
-            raise ValueError("Médico no registrado")
-        self.__medicos[matricula].agregar_especialidad(especialidad)
-
-    def agendar_turno(self, dni_paciente: str, matricula_medico: str, fecha_hora: datetime):
+    def agendar_turno(self, dni: str, matricula: str, fecha_hora: datetime):
         # Validar existencia
-        if dni_paciente not in self.__pacientes:
-            raise ValueError("Paciente no registrado")
-        if matricula_medico not in self.__medicos:
-            raise ValueError("Médico no registrado")
+        if dni not in self.__pacientes:
+            raise PacienteNoEncontrado("Paciente no registrado")
+        if matricula not in self.__medicos:
+            raise MedicoNoDisponible("Médico no registrado")
+        # (Opcional) No agendar turnos en el pasado
+        if fecha_hora < datetime.now():
+            raise ValueError("No se puede agendar un turno en el pasado.")
 
-        # Validar disponibilidad
-        medico = self.__medicos[matricula_medico]
-        dia_semana_en = fecha_hora.strftime("%A").lower()  # Ej: "monday"
-        dia_semana = DIAS_SEMANA.get(dia_semana_en, dia_semana_en)  # Traducir a español si es posible
-        
-        if not any(esp.atiende_dia(dia_semana) for esp in medico.obtener_especialidades()):
-            raise ValueError("Médico no atiende ese día")
+        # Evitar turnos duplicados (mismo médico y hora)
+        for turno in self.__turnos:
+            if (turno.obtener_medico().obtener_matricula() == matricula and
+                turno.obtener_fecha_hora() == fecha_hora):
+                raise TurnoOcupado("El turno solicitado ya está ocupado.")
 
-        # Crear y registrar turno
-        paciente = self.__pacientes[dni_paciente]
-        especialidad = "Consulta general" 
+        paciente = self.__pacientes[dni]
+        medico = self.__medicos[matricula]
+        # Si usas especialidad, puedes adaptarlo aquí
+        especialidad = "Consulta general"
         turno = Turno(paciente, medico, fecha_hora, especialidad)
         self.__turnos.append(turno)
+        self.__historias_clinicas[dni].agregar_turno(turno)
 
-    def emitir_receta(self, dni_paciente: str, matricula_medico: str, medicamentos: list[str]):
-        if dni_paciente not in self.__pacientes or matricula_medico not in self.__medicos:
-            raise ValueError("Datos inválidos")
-
+    def emitir_receta(self, dni: str, matricula: str, medicamentos: list[str]):
+        if dni not in self.__pacientes:
+            raise PacienteNoEncontrado("Paciente no registrado")
+        if matricula not in self.__medicos:
+            raise MedicoNoDisponible("Médico no registrado")
         receta = Receta(
-            self.__pacientes[dni_paciente],
-            self.__medicos[matricula_medico],
+            self.__pacientes[dni],
+            self.__medicos[matricula],
             medicamentos
         )
-        self.__historias_clinicas[dni_paciente].agregar_receta(receta)
+        self.__historias_clinicas[dni].agregar_receta(receta)
 
     def obtener_historia_clinica(self, dni: str) -> HistoriaClinica:
         if dni not in self.__historias_clinicas:
-            raise ValueError("Paciente no registrado")
+            raise PacienteNoEncontrado("Paciente no registrado")
         return self.__historias_clinicas[dni]
-
-    # Métodos agregados para compatibilidad con la CLI y los tests
-    def obtener_pacientes(self) -> list[Paciente]:
-        return list(self.__pacientes.values())
-
-    def obtener_medicos(self) -> list[Medico]:
-        return list(self.__medicos.values())
-
-    def obtener_medico_por_matricula(self, matricula: str) -> Medico:
-        return self.__medicos.get(matricula)
 
     def obtener_turnos(self) -> list[Turno]:
         return self.__turnos
-    

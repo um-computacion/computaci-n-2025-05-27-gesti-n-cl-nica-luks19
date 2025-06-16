@@ -14,14 +14,8 @@ class Paciente:
             raise DNIInvalidoException("DNI debe tener 8 dígitos numéricos.")
         return dni
 
-    def obtener_nombre(self) -> str:
-        return self.__nombre
-
     def obtener_dni(self) -> str:
         return self.__dni
-
-    def obtener_fecha_nacimiento(self) -> str:
-        return self.__fecha_nacimiento
 
     def __str__(self) -> str:
         return f"Paciente: {self.__nombre} (DNI: {self.__dni}, Fecha de Nacimiento: {self.__fecha_nacimiento})"

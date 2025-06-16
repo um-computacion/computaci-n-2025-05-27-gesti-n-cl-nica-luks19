@@ -1,5 +1,3 @@
-from .turno import Turno
-from .receta import Receta
 
 class HistoriaClinica:
     def __init__(self, paciente):
@@ -7,17 +5,17 @@ class HistoriaClinica:
         self.__turnos = []
         self.__recetas = []
 
-    def agregar_turno(self, turno: Turno):
+    def agregar_turno(self, turno):
         self.__turnos.append(turno)
 
-    def agregar_receta(self, receta: Receta):
+    def agregar_receta(self, receta):
         self.__recetas.append(receta)
 
-    def get_turnos(self):
+    def obtener_turnos(self):
         return self.__turnos
 
-    def get_recetas(self):
+    def obtener_recetas(self):
         return self.__recetas
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f"Historia de {self.__paciente.obtener_nombre()} (DNI: {self.__paciente.obtener_dni()}): {len(self.__turnos)} turnos, {len(self.__recetas)} recetas"

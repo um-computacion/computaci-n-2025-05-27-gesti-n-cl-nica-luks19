@@ -6,7 +6,7 @@ from datetime import datetime
 
 class CLI:
     def __init__(self):
-        self.__clinica = Clinica()  # Usa la clase principal
+        self.__clinica = Clinica()
 
     def mostrar_menu(self):
         print("\n--- Menú Clínica ---")
@@ -16,6 +16,9 @@ class CLI:
         print("4. Agendar turno")
         print("5. Emitir receta")
         print("6. Ver historia clínica")
+        print("7. Ver todos los turnos")
+        print("8. Ver todos los pacientes")
+        print("9. Ver todos los médicos")
         print("0. Salir")
 
     def iniciar(self):
@@ -34,6 +37,12 @@ class CLI:
                 self.__emitir_receta()
             elif opcion == "6":
                 self.__ver_historia_clinica()
+            elif opcion == "7":
+                self.__ver_todos_los_turnos()
+            elif opcion == "8":
+                self.__ver_todos_los_pacientes()
+            elif opcion == "9":
+                self.__ver_todos_los_medicos()
             elif opcion == "0":
                 print("Saliendo del sistema...")
                 break
@@ -77,11 +86,7 @@ class CLI:
             dni = input("DNI del paciente: ")
             matricula = input("Matrícula del médico: ")
             fecha = input("Fecha (dd/mm/aaaa HH:MM): ")
-            try:
-                fecha_dt = datetime.strptime(fecha, "%d/%m/%Y %H:%M")
-            except ValueError:
-                print("Formato de fecha incorrecto. Debe ser dd/mm/aaaa HH:MM")
-                return
+            fecha_dt = datetime.strptime(fecha, "%d/%m/%Y %H:%M")
             self.__clinica.agendar_turno(dni, matricula, fecha_dt)
             print("Turno agendado con éxito!")
         except Exception as e:
@@ -101,25 +106,60 @@ class CLI:
         try:
             dni = input("DNI del paciente: ")
             historia_clinica = self.__clinica.obtener_historia_clinica(dni)
-            if historia_clinica:
-                print(str(historia_clinica))
-                # Mostrar recetas
-                recetas = historia_clinica.get_recetas()
-                if recetas:
-                    print("\nRecetas:")
-                    for receta in recetas:
-                        print(receta)
-                else:
-                    print("\nNo hay recetas registradas.")
-                # Mostrar turnos (opcional)
-                turnos = historia_clinica.get_turnos()
-                if turnos:
-                    print("\nTurnos:")
-                    for turno in turnos:
-                        print(turno)
-                else:
-                    print("\nNo hay turnos registrados.")
+            print(str(historia_clinica))
+            recetas = historia_clinica.get_recetas()
+            if recetas:
+                print("\nRecetas:")
+                for receta in recetas:
+                    print(receta)
             else:
-                print("No se encontró la historia clínica para el DNI proporcionado.")
+                print("\nNo hay recetas registradas.")
+            turnos = historia_clinica.get_turnos()
+            if turnos:
+                print("\nTurnos:")
+                for turno in turnos:
+                    print(turno)
+            else:
+                print("\nNo hay turnos registrados.")
         except Exception as e:
             print(f"Error: {e}")
+
+    def __ver_todos_los_turnos(self):
+        try:
+            turnos = self.__clinica.obtener_turnos()
+            if turnos:
+                print("\n--- Todos los turnos ---")
+                for turno in turnos:
+                    print(turno)
+            else:
+                print("No hay turnos registrados.")
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def __ver_todos_los_pacientes(self):
+        try:
+            pacientes = self.__clinica.obtener_pacientes()
+            if pacientes:
+                print("\n--- Todos los pacientes ---")
+                for paciente in pacientes:
+                    print(paciente)
+            else:
+                print("No hay pacientes registrados.")
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def __ver_todos_los_medicos(self):
+        try:
+            medicos = self.__clinica.obtener_medicos()
+            if medicos:
+                print("\n--- Todos los médicos ---")
+                for medico in medicos:
+                    print(medico)
+            else:
+                print("No hay médicos registrados.")
+        except Exception as e:
+            print(f"Error: {e}")
+
+if __name__ == "__main__":
+    cli = CLI()
+    cli.iniciar()
