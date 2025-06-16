@@ -12,7 +12,7 @@ class TestHistoriaClinica(unittest.TestCase):
         medico = Medico("Dr. Smith", "MP-12345")
         turno = Turno(paciente, medico, "10:00", "Consulta")
         historia_clinica.agregar_turno(turno)
-        self.assertEqual(len(historia_clinica.__turnos), 1)
+        self.assertEqual(len(historia_clinica.get_turnos()), 1)
 
     def test_agregar_receta(self):
         paciente = Paciente("María", "23456789", "02/02/1999")
@@ -20,7 +20,7 @@ class TestHistoriaClinica(unittest.TestCase):
         medico = Medico("Dr. Johnson", "MP-67890")
         receta = Receta(paciente, medico, ["Paracetamol", "Ibuprofeno"])
         historia_clinica.agregar_receta(receta)
-        self.assertEqual(len(historia_clinica.__recetas), 1)
+        self.assertEqual(len(historia_clinica.get_recetas()), 1)
 
     def test_str(self):
         paciente = Paciente("Pedro", "34567890", "03/03/1988")
@@ -28,4 +28,4 @@ class TestHistoriaClinica(unittest.TestCase):
         self.assertEqual(str(historia_clinica), f"Historia de {paciente}: 0 turnos, 0 recetas")
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main() 

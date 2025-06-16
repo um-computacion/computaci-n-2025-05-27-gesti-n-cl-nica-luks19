@@ -13,5 +13,11 @@ class HistoriaClinica:
     def agregar_receta(self, receta: Receta):
         self.__recetas.append(receta)
 
+    def get_turnos(self):
+        return self.__turnos
+
+    def get_recetas(self):
+        return self.__recetas
+
     def __str__(self) -> str:
         return f"Historia de {self.__paciente}: {len(self.__turnos)} turnos, {len(self.__recetas)} recetas"

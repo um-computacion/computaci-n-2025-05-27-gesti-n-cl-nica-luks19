@@ -9,7 +9,7 @@ class TestEspecialidad(unittest.TestCase):
 
     def test_dias_atencion(self):
         especialidad = Especialidad("Neurología", ["martes", "jueves"])
-        self.assertEqual(especialidad.__Especialidad__dias_atencion, ["martes", "jueves"])
+        self.assertEqual(especialidad.get_dias_atencion(), ["martes", "jueves"])
 
 if __name__ == '__main__':
     unittest.main()

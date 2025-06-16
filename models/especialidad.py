@@ -5,3 +5,6 @@ class Especialidad:
 
     def atiende_dia(self, dia: str) -> bool:
         return dia.lower() in self.__dias_atencion
+
+    def get_dias_atencion(self) -> list[str]:
+        return self.__dias_atencion

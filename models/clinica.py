@@ -4,6 +4,7 @@ from .medico import Medico
 from .turno import Turno
 from .historia_clinica import HistoriaClinica
 from .receta import Receta
+from .especialidad import Especialidad 
 from .exceptions import *
 
 class Clinica:
@@ -47,7 +48,7 @@ class Clinica:
 
         # Crear y registrar turno
         paciente = self.__pacientes[dni_paciente]
-        especialidad = "Consulta general"  # Puedes modificarlo según sea necesario
+        especialidad = "Consulta general" 
         turno = Turno(paciente, medico, fecha_hora, especialidad)
         self.__turnos.append(turno)
 
