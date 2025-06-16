@@ -102,9 +102,23 @@ class CLI:
             dni = input("DNI del paciente: ")
             historia_clinica = self.__clinica.obtener_historia_clinica(dni)
             if historia_clinica:
-                print(f"Historia Clínica de {historia_clinica.obtener_paciente().obtener_nombre()}:")
-                for receta in historia_clinica.obtener_recetas():
-                    print(receta)
+                print(str(historia_clinica))
+                # Mostrar recetas
+                recetas = historia_clinica.get_recetas()
+                if recetas:
+                    print("\nRecetas:")
+                    for receta in recetas:
+                        print(receta)
+                else:
+                    print("\nNo hay recetas registradas.")
+                # Mostrar turnos (opcional)
+                turnos = historia_clinica.get_turnos()
+                if turnos:
+                    print("\nTurnos:")
+                    for turno in turnos:
+                        print(turno)
+                else:
+                    print("\nNo hay turnos registrados.")
             else:
                 print("No se encontró la historia clínica para el DNI proporcionado.")
         except Exception as e:

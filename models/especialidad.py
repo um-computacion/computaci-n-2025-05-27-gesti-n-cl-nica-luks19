@@ -8,3 +8,6 @@ class Especialidad:
 
     def get_dias_atencion(self) -> list[str]:
         return self.__dias_atencion
+
+    def __str__(self):
+        return self.__nombre 

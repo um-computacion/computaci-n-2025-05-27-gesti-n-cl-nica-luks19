@@ -20,5 +20,8 @@ class Paciente:
     def obtener_dni(self) -> str:
         return self.__dni
 
+    def obtener_fecha_nacimiento(self) -> str:
+        return self.__fecha_nacimiento
+
     def __str__(self) -> str:
-        return f"Paciente: {self.__nombre} (DNI: {self.__dni})" 
+        return f"Paciente: {self.__nombre} (DNI: {self.__dni}, Fecha de Nacimiento: {self.__fecha_nacimiento})"

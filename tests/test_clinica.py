@@ -2,7 +2,7 @@ import unittest
 from models.clinica import Clinica
 from models.paciente import Paciente
 from models.medico import Medico
-from models.exceptions import *
+from models.exceptions import PacienteExistenteException
 
 class TestClinica(unittest.TestCase):
     def test_agregar_paciente(self):
@@ -11,3 +11,6 @@ class TestClinica(unittest.TestCase):
         clinica.agregar_paciente(p)
         with self.assertRaises(PacienteExistenteException):
             clinica.agregar_paciente(p)
+
+if __name__ == '__main__':
+    unittest.main()

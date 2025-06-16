@@ -25,7 +25,8 @@ class TestHistoriaClinica(unittest.TestCase):
     def test_str(self):
         paciente = Paciente("Pedro", "34567890", "03/03/1988")
         historia_clinica = HistoriaClinica(paciente)
-        self.assertEqual(str(historia_clinica), f"Historia de {paciente}: 0 turnos, 0 recetas")
+        esperado = f"Historia de {paciente.obtener_nombre()} (DNI: {paciente.obtener_dni()}): 0 turnos, 0 recetas"
+        self.assertEqual(str(historia_clinica), esperado)
 
 if __name__ == '__main__':
     unittest.main() 

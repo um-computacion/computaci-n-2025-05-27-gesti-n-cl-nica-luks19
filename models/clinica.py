@@ -7,6 +7,17 @@ from .receta import Receta
 from .especialidad import Especialidad 
 from .exceptions import *
 
+# Diccionario para traducir días de la semana de inglés a español
+DIAS_SEMANA = {
+    "monday": "lunes",
+    "tuesday": "martes",
+    "wednesday": "miércoles",
+    "thursday": "jueves",
+    "friday": "viernes",
+    "saturday": "sábado",
+    "sunday": "domingo"
+}
+
 class Clinica:
     def __init__(self):
         self.__pacientes = {}  # {dni: Paciente}
@@ -41,7 +52,8 @@ class Clinica:
 
         # Validar disponibilidad
         medico = self.__medicos[matricula_medico]
-        dia_semana = fecha_hora.strftime("%A").lower()  # Ej: "monday" → "lunes"
+        dia_semana_en = fecha_hora.strftime("%A").lower()  # Ej: "monday"
+        dia_semana = DIAS_SEMANA.get(dia_semana_en, dia_semana_en)  # Traducir a español si es posible
         
         if not any(esp.atiende_dia(dia_semana) for esp in medico.obtener_especialidades()):
             raise ValueError("Médico no atiende ese día")
@@ -67,3 +79,17 @@ class Clinica:
         if dni not in self.__historias_clinicas:
             raise ValueError("Paciente no registrado")
         return self.__historias_clinicas[dni]
+
+    # Métodos agregados para compatibilidad con la CLI y los tests
+    def obtener_pacientes(self) -> list[Paciente]:
+        return list(self.__pacientes.values())
+
+    def obtener_medicos(self) -> list[Medico]:
+        return list(self.__medicos.values())
+
+    def obtener_medico_por_matricula(self, matricula: str) -> Medico:
+        return self.__medicos.get(matricula)
+
+    def obtener_turnos(self) -> list[Turno]:
+        return self.__turnos
+    

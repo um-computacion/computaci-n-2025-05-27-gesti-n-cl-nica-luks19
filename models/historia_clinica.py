@@ -20,4 +20,4 @@ class HistoriaClinica:
         return self.__recetas
 
     def __str__(self) -> str:
-        return f"Historia de {self.__paciente}: {len(self.__turnos)} turnos, {len(self.__recetas)} recetas"
+        return f"Historia de {self.__paciente.obtener_nombre()} (DNI: {self.__paciente.obtener_dni()}): {len(self.__turnos)} turnos, {len(self.__recetas)} recetas"

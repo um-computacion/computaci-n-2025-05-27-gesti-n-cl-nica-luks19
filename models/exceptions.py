@@ -4,10 +4,6 @@ class ClinicaException(Exception):
 class MatriculaInvalidaException(ClinicaException):
     pass
 
-class ClinicaException(Exception):
-    pass
-
-# ... (las que ya tenías)
 class PacienteExistenteException(ClinicaException):
     pass
 
