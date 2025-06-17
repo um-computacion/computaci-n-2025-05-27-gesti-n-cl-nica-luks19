@@ -46,11 +46,17 @@ USO DE TESTS
 Para ejecutar los tests, desde el directorio principal usa:
 
 python3 -m unittest tests/test_cli.py
+
 python3 -m unittest tests/test_clinica.py
+
 python3 -m unittest tests/test_paciente.py
+
 python3 -m unittest tests/test_medico.py
+
 python3 -m unittest tests/test_receta.py
+
 python3 -m unittest tests/test_historia_clinica.py
+
 python3 -m unittest tests/test_especialidad.py
 
 Cada archivo de test cubre los siguientes casos:
