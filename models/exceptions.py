@@ -30,3 +30,16 @@ class FormatoIncorrecto(ClinicaException):
 class ValorIncorrecto(ClinicaException):
     def __init__(self, message="Debes introducir un número!"):
         super().__init__(message)
+
+
+class PacienteExistenteException(ClinicaException):
+    pass
+
+class MedicoExistenteException(ClinicaException):
+    pass
+
+class MatriculaInvalidaException(ClinicaException):
+    pass
+
+class DNIInvalidoException(ClinicaException):
+    pass

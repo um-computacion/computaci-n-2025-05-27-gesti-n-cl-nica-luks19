@@ -44,17 +44,20 @@ class Clinica:
             raise MedicoExistenteException(f"La matrícula {matricula} ya existe")
         self.__medicos[matricula] = medico
 
+    def agregar_especialidad_a_medico(self, matricula: str, especialidad: Especialidad):
+        if matricula not in self.__medicos:
+            raise MedicoNoDisponible("Médico no encontrado")
+        medico = self.__medicos[matricula]
+        medico.agregar_especialidad(especialidad)
+
     def agendar_turno(self, dni: str, matricula: str, fecha_hora: datetime):
-        # Validar existencia
         if dni not in self.__pacientes:
             raise PacienteNoEncontrado("Paciente no registrado")
         if matricula not in self.__medicos:
             raise MedicoNoDisponible("Médico no registrado")
-        # (Opcional) No agendar turnos en el pasado
         if fecha_hora < datetime.now():
             raise ValueError("No se puede agendar un turno en el pasado.")
 
-        # Evitar turnos duplicados (mismo médico y hora)
         for turno in self.__turnos:
             if (turno.obtener_medico().obtener_matricula() == matricula and
                 turno.obtener_fecha_hora() == fecha_hora):
@@ -62,7 +65,6 @@ class Clinica:
 
         paciente = self.__pacientes[dni]
         medico = self.__medicos[matricula]
-        # Si usas especialidad, puedes adaptarlo aquí
         especialidad = "Consulta general"
         turno = Turno(paciente, medico, fecha_hora, especialidad)
         self.__turnos.append(turno)
@@ -87,3 +89,14 @@ class Clinica:
 
     def obtener_turnos(self) -> list[Turno]:
         return self.__turnos
+
+    def obtener_medico_por_matricula(self, matricula: str) -> Medico:
+        if matricula not in self.__medicos:
+            raise MedicoNoDisponible("Médico no encontrado")
+        return self.__medicos[matricula]
+
+    def obtener_medicos(self) -> list[Medico]:
+        return list(self.__medicos.values())
+
+    def obtener_pacientes(self) -> list[Paciente]:
+        return list(self.__pacientes.values())
